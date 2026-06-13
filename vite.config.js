@@ -3,6 +3,10 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  // GitHub Pages serves the site from /dieta-app/. The deploy workflow sets
+  // GITHUB_PAGES=true so the bundle uses the right sub-path, while local dev
+  // and root-domain hosts (e.g. Vercel) keep using '/'.
+  base: process.env.GITHUB_PAGES ? '/dieta-app/' : '/',
   plugins: [
     react(),
     VitePWA({
@@ -16,7 +20,9 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        // Relative so the installed PWA opens correctly both at the domain
+        // root (Vercel) and under the /dieta-app/ sub-path (GitHub Pages).
+        start_url: '.',
         icons: [
           {
             src: 'icon-192.png',
