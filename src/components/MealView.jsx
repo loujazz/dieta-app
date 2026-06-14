@@ -1,6 +1,36 @@
 import { useTheme } from '../theme.js';
 import FoodBlock from './FoodBlock.jsx';
 
+function CyclingPhase({ fase }) {
+  const t = useTheme();
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 11, fontWeight: 800, color: t.txCycHdr, background: t.bgFreq, padding: '3px 10px', borderRadius: 20, letterSpacing: '0.6px', textTransform: 'uppercase' }}>
+          {fase.titolo}
+        </span>
+        {fase.sottotitolo && (
+          <span style={{ fontSize: 11.5, fontWeight: 500, color: t.txCycBody }}>{fase.sottotitolo}</span>
+        )}
+      </div>
+      <ul style={{ margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {fase.voci.map((voce, i) => (
+          <li key={i} style={{ fontSize: 13, color: t.txCycBody, lineHeight: 1.55 }}>
+            {voce.testo}
+            {voce.prodotti && (
+              <ul style={{ margin: '6px 0 0', paddingLeft: 16, display: 'flex', flexDirection: 'column', gap: 4, listStyleType: 'circle' }}>
+                {voce.prodotti.map((p, j) => (
+                  <li key={j} style={{ fontSize: 12.5, color: t.txCycBody, lineHeight: 1.5 }}>{p}</li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function CyclingSection({ ciclismo }) {
   const t = useTheme();
   if (!ciclismo) return null;
@@ -9,16 +39,17 @@ function CyclingSection({ ciclismo }) {
       <summary style={{ padding: '12px 16px', fontWeight: 700, color: t.txCycHdr, cursor: 'pointer', fontSize: 14, userSelect: 'none' }}>
         🚴 {ciclismo.titolo}
       </summary>
-      <div style={{ padding: '0 16px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {ciclismo.corpo.map((para, i) => (
-          <p key={i} style={{ margin: 0, fontSize: 13, color: t.txCycBody, lineHeight: 1.6 }}>{para}</p>
+      <div style={{ padding: '0 16px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {ciclismo.intro && ciclismo.intro.length > 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {ciclismo.intro.map((para, i) => (
+              <p key={i} style={{ margin: 0, fontSize: 13, color: t.txCycBody, lineHeight: 1.6 }}>{para}</p>
+            ))}
+          </div>
+        )}
+        {ciclismo.fasi && ciclismo.fasi.map(fase => (
+          <CyclingPhase key={fase.id} fase={fase} />
         ))}
-        <p style={{ margin: '8px 0 4px', fontWeight: 700, color: t.txCycHdr, fontSize: 13 }}>Suggerimenti pratici:</p>
-        <ul style={{ margin: 0, paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 6 }}>
-          {ciclismo.suggerimenti.map((s, i) => (
-            <li key={i} style={{ fontSize: 13, color: t.txCycBody, lineHeight: 1.6 }}>{s}</li>
-          ))}
-        </ul>
       </div>
     </details>
   );

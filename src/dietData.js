@@ -157,16 +157,64 @@ export const defaultDiet = {
   ],
   ciclismo: {
     titolo: "Indicazioni per la giornata di ciclismo (>2h)",
-    corpo: [
+    intro: [
       "I cibi e le bevande da consumare nelle ore precedenti l'attività dovrebbero contribuire alle scorte glucidiche, garantire un adeguato stato di idratazione e mantenere il benessere gastrointestinale.",
-      "Il tipo, i tempi e la quantità di alimenti dovrebbero essere testati e personalizzati a seconda delle preferenze e della tollerabilità di ogni atleta.",
-      "La disidratazione può far aumentare la sensazione di fatica. Dopo la gara, ripristinare il bilancio idrico bevendo un volume pari a ~125–150% della perdita avvenuta."
+      "Tipo, tempi e quantità di alimenti e bevande vanno testati e personalizzati in base a preferenze, tollerabilità ed esperienza di ogni atleta."
     ],
-    suggerimenti: [
-      "Consumare la colazione o la merenda prevista almeno 1 ora prima dell'inizio dell'attività.",
-      "Carbo plus Energy, proAction: 53g (2 misurini) in 500ml di acqua. Iniziare circa 1h prima dell'attività.",
-      "Carbo Sprint Ultra Race, proAction; Total Energy Carbo Gel, Named Sport: 1 stick/barretta ogni 40–45 min. In alternativa: banana, toast con miele, 40g di albicocche secche.",
-      "Bevanda post-gara: succo d'arancia + integratore Magnesio e Potassio, oppure Sport Drink ProAction."
+    fasi: [
+      {
+        id: "prima",
+        titolo: "Prima",
+        sottotitolo: "Nelle ore precedenti l'attività",
+        voci: [
+          { testo: "Consumare la colazione o la merenda prevista nello schema almeno 1 ora prima dell'inizio dell'attività." },
+          {
+            testo: "Bevanda glucidica: iniziare a sorseggiarla circa 1 ora prima e terminarla all'inizio dell'attività.",
+            prodotti: [
+              "Carbo Plus Energy, ProAction: 53 g (2 misurini) in 500 ml di acqua"
+            ]
+          }
+        ]
+      },
+      {
+        id: "durante",
+        titolo: "Durante",
+        sottotitolo: "Ogni 40–45 min (per 4–5 volte)",
+        voci: [
+          {
+            testo: "Gel o barretta energetica, 1 ogni 40–45 min:",
+            prodotti: [
+              "Carbo Sprint Ultra Race, ProAction",
+              "Total Energy Carbo Gel, Named Sport",
+              "Energybar, Named Sport"
+            ]
+          },
+          {
+            testo: "In alternativa, alimenti solidi ogni 45 min circa:",
+            prodotti: [
+              "Banana",
+              "Toast con 2 fette di pancarrè e miele o marmellata",
+              "40 g di albicocche secche o datteri"
+            ]
+          }
+        ]
+      },
+      {
+        id: "dopo",
+        titolo: "Dopo",
+        sottotitolo: "Recupero e reidratazione",
+        voci: [
+          { testo: "Reintegrare i liquidi bevendo un volume pari a circa 125–150% della perdita avvenuta con il sudore (es. 1,25–1,5 L per ogni kg di peso perso)." },
+          {
+            testo: "Bevanda di recupero da sorseggiare dopo la gara, una a scelta tra:",
+            prodotti: [
+              "Spremuta d'arancia (anche confezionata) + integratore di Magnesio e Potassio + acqua",
+              "Sport Drink, ProAction: 1 bottiglietta",
+              "HydraFit, Named Sport: 30 g"
+            ]
+          }
+        ]
+      }
     ]
   }
 };
