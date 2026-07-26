@@ -51,6 +51,12 @@ export const IcoAuto = ({ c = 'currentColor', s = 15 }) => (
   </svg>
 );
 
+export const IcoZap = ({ c = 'currentColor', s = 15 }) => (
+  <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+  </svg>
+);
+
 export const IcoChevron = ({ c = 'currentColor', s = 15, up = false }) => (
   <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2.5" strokeLinecap="round"
     style={{ transform: up ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.18s ease' }}>

@@ -44,7 +44,7 @@ export function InfoModal({ indicazioni, onClose }) {
   );
 }
 
-export function ImportModal({ diet, onImport, onExport, onClose }) {
+export function ImportModal({ diet, viewLabel, onImport, onExport, onClose }) {
   const t = useTheme();
   const [text,  setText]  = useState('');
   const [error, setError] = useState('');
@@ -70,12 +70,12 @@ export function ImportModal({ diet, onImport, onExport, onClose }) {
       <div style={{ background: t.bgModal, borderRadius: 16, maxWidth: 480, width: '100%', maxHeight: '85vh', display: 'flex', flexDirection: 'column', border: `1px solid ${t.bdrModal}`, overflow: 'hidden' }}
         onClick={e => e.stopPropagation()}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px 14px', borderBottom: `1px solid ${t.bdrModal}`, flexShrink: 0 }}>
-          <span style={{ fontWeight: 700, color: t.txModalTi, fontSize: 16 }}>Gestione dati dieta</span>
+          <span style={{ fontWeight: 700, color: t.txModalTi, fontSize: 16 }}>Gestione dati dieta{viewLabel ? ` · ${viewLabel}` : ''}</span>
           <button onClick={onClose} style={{ padding: 4 }}><IcoX c={t.txMuted} s={18} /></button>
         </div>
         <div style={{ overflowY: 'auto', padding: 20, display: 'flex', flexDirection: 'column', gap: 14, flex: 1 }}>
           <p style={{ margin: 0, fontSize: 13, color: t.txModal, lineHeight: 1.55 }}>
-            Per caricare una nuova dieta incolla qui il JSON. Esporta la dieta attuale per usarla come riferimento di formato.
+            Stai modificando la vista <strong>{viewLabel || 'attuale'}</strong>: le altre viste non vengono toccate. Per caricare una nuova dieta incolla qui il JSON, oppure esporta quella attuale come riferimento di formato.
           </p>
           <button onClick={onExport}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: t.bgExport, color: t.txExport, borderRadius: 10, padding: '10px 16px', fontSize: 13, fontWeight: 600, border: `1px solid ${t.bdrExport}`, cursor: 'pointer' }}>

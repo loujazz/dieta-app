@@ -1,10 +1,23 @@
 import { useState, useEffect } from 'react';
 import { isEvening, buildTheme, ThemeCtx } from './theme.js';
-import { defaultDiet } from './dietData.js';
+import { defaultDiet, sportDiet } from './dietData.js';
 import Header from './components/Header.jsx';
+import ViewSwitch from './components/ViewSwitch.jsx';
 import TabBar from './components/TabBar.jsx';
 import MealView from './components/MealView.jsx';
 import { NoteModal, InfoModal, ImportModal } from './components/Modals.jsx';
+
+const STORAGE = {
+  normale: { key: 'dieta-data', fallback: defaultDiet, label: 'Dieta normale', file: 'dieta.json' },
+  sport:   { key: 'dieta-data-sport', fallback: sportDiet, label: 'Giorno Sport', file: 'dieta-sport.json' },
+};
+
+function loadDiet(view) {
+  try {
+    const saved = localStorage.getItem(STORAGE[view].key);
+    return saved ? JSON.parse(saved) : STORAGE[view].fallback;
+  } catch { return STORAGE[view].fallback; }
+}
 
 export default function App() {
   /* ── Tema ── */
@@ -38,13 +51,15 @@ export default function App() {
     });
   };
 
-  /* ── Dati dieta ── */
-  const [diet, setDiet] = useState(() => {
-    try {
-      const saved = localStorage.getItem('dieta-data');
-      return saved ? JSON.parse(saved) : defaultDiet;
-    } catch { return defaultDiet; }
-  });
+  /* ── Vista: dieta normale vs giorno sport (affiancate, non sostitutive) ── */
+  const [view, setView] = useState(() => localStorage.getItem('dieta-view') || 'normale');
+
+  /* ── Dati dieta: uno stato indipendente per ciascuna vista ── */
+  const [dietNormale, setDietNormale] = useState(() => loadDiet('normale'));
+  const [dietSport,   setDietSport]   = useState(() => loadDiet('sport'));
+
+  const diet    = view === 'sport' ? dietSport : dietNormale;
+  const setDiet = view === 'sport' ? setDietSport : setDietNormale;
 
   const [activeTab, setActiveTab] = useState(
     () => localStorage.getItem('dieta-tab') || diet.pasti[0].id
@@ -59,6 +74,17 @@ export default function App() {
     localStorage.setItem('dieta-tab', id);
   };
 
+  const handleViewChange = id => {
+    if (id === view) return;
+    setView(id);
+    localStorage.setItem('dieta-view', id);
+    setExpandedBlocks({});
+    const nextDiet = id === 'sport' ? dietSport : dietNormale;
+    if (!nextDiet.pasti.find(p => p.id === activeTab)) {
+      handleTabChange(nextDiet.pasti[0].id);
+    }
+  };
+
   const toggleBlock = key =>
     setExpandedBlocks(prev => ({ ...prev, [key]: !prev[key] }));
 
@@ -66,7 +92,7 @@ export default function App() {
     setDiet(newDiet);
     setActiveTab(newDiet.pasti[0].id);
     setExpandedBlocks({});
-    localStorage.setItem('dieta-data', JSON.stringify(newDiet));
+    localStorage.setItem(STORAGE[view].key, JSON.stringify(newDiet));
     localStorage.setItem('dieta-tab', newDiet.pasti[0].id);
     setShowImport(false);
   };
@@ -75,7 +101,7 @@ export default function App() {
     const blob = new Blob([JSON.stringify(diet, null, 2)], { type: 'application/json' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
-    a.href = url; a.download = 'dieta.json';
+    a.href = url; a.download = STORAGE[view].file;
     document.body.appendChild(a); a.click();
     document.body.removeChild(a); URL.revokeObjectURL(url);
   };
@@ -93,6 +119,7 @@ export default function App() {
           onInfoClick={() => setShowInfo(true)}
           onImportClick={() => setShowImport(true)}
         />
+        <ViewSwitch view={view} onChange={handleViewChange} />
         <TabBar pasti={diet.pasti} activeTab={activeTab} onTabChange={handleTabChange} />
         {currentMeal && (
           <MealView
@@ -108,8 +135,16 @@ export default function App() {
       {activeNote !== null && (
         <NoteModal noteId={activeNote} noteText={activeNoteObj?.testo} onClose={() => setActiveNote(null)} />
       )}
-      {showInfo   && <InfoModal indicazioni={diet.indicazioniGenerali} onClose={() => setShowInfo(false)} />}
-      {showImport && <ImportModal diet={diet} onImport={handleImport} onExport={handleExport} onClose={() => setShowImport(false)} />}
+      {showInfo   && <InfoModal indicazioni={diet.indicazioniGenerali || defaultDiet.indicazioniGenerali} onClose={() => setShowInfo(false)} />}
+      {showImport && (
+        <ImportModal
+          diet={diet}
+          viewLabel={STORAGE[view].label}
+          onImport={handleImport}
+          onExport={handleExport}
+          onClose={() => setShowImport(false)}
+        />
+      )}
     </ThemeCtx.Provider>
   );
 }
