@@ -5,7 +5,7 @@ export default function TabBar({ pasti, activeTab, onTabChange }) {
   const t = useTheme();
 
   return (
-    <div style={{ position: 'sticky', top: 69, zIndex: 10, background: t.bgTabBar, borderBottom: `1px solid ${t.bdrTabBar}`, boxShadow: t.showIcons ? '0 1px 8px rgba(0,0,0,0.05)' : 'none' }}>
+    <div style={{ position: 'sticky', top: 124, zIndex: 10, background: t.bgTabBar, borderBottom: `1px solid ${t.bdrTabBar}`, boxShadow: t.showIcons ? '0 1px 8px rgba(0,0,0,0.05)' : 'none' }}>
       <div style={{ display: 'flex', overflowX: 'auto', padding: t.showIcons ? '8px 10px' : '10px 14px', gap: t.showIcons ? 4 : 7 }}>
         {pasti.map(pasto => {
           const ac  = pasto.id === activeTab;
